@@ -1,0 +1,84 @@
+﻿@model List<Rest_Contries.Web.Model.Country>
+<h1>Consulta de Países</h1>
+
+<!-- Adicione isso ao início do seu arquivo Razor para incluir o jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+
+<form id="consultaForm" method="get">
+    <label for="name">Nome do País:</label>
+    <input type="text" id="name" name="name" />
+
+    <label for="currency">Moeda:</label>
+    <input type="text" id="currency" name="currency" />
+
+    <label for="code">Código:</label>
+    <input type="text" id="code" name="code" />
+
+    <label for="language">Idioma:</label>
+    <input type="text" id="language" name="language" />
+
+    <button type="button" onclick="realizarConsulta()">Consultar</button>
+</form>
+
+
+    <form id="resultadoConsulta">
+
+        <h2>Resultados da Consulta</h2>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>País</th>
+                <th>Capital</th>
+                <th>População</th>
+            </tr>
+        </thead>
+        <tbody id="data">
+           
+        </tbody>
+    </table>
+    </form>
+
+
+
+<script>
+        function realizarConsulta() {
+            // Coletar dados do formulário
+            var formData = $("#consultaForm").serialize();
+
+            // Fazer chamada AJAX
+            $.ajax({
+                url: "/Country/GetConsulta", // Substitua com a rota correta do seu backend
+                type: "GET",
+                data: formData,
+                dataType: "json", // Indicar que esperamos JSON como resposta
+                success: function (result) {
+                    // Limpar a tabela antes de adicionar os novos dados
+                    $("#resultadoConsulta table tbody").empty();
+
+                    // Adicionar os novos dados à tabela
+                var country = result;
+
+                $.each(country, function (index, data) {
+                    var newRow = `<tr>
+                        <td>${data.name.common}</td>
+                                <td>${data.capital[0]}</td>
+                                <td>${data.population}</td>
+                    </tr>`; 
+                    console.log(newRow);
+                    $("#data").append(newRow);
+                });
+
+                },
+                error: function (error) {
+                    console.error("Erro na consulta AJAX: " + error);
+                }
+            });
+        }
+
+    function exibirResultados(result) {
+        // Atualizar a div de resultados com os dados retornados
+        $("#resultadoConsulta").html(result);
+    }
+</script>

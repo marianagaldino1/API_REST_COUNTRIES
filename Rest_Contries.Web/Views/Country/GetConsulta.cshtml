@@ -1,0 +1,25 @@
+﻿@model List<Rest_Contries.Web.Model.Country>
+
+<h1>Lista de Países</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>País</th>
+            <th>Capital</th>
+            <th>População</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var country in Model)
+        {
+            <tr>
+                <td>@country.name</td>
+                <td>@country.capital.FirstOrDefault()</td>
+                <td>@country.population</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
